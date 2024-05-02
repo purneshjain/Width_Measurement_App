@@ -3,7 +3,7 @@ name: Streamlit App Deployment
 on:
   push:
     branches:
-      - main  # Change this to your main branch name
+      - Width_Measurement_App/github  # Change this to your main branch name
 
 jobs:
   deploy:
