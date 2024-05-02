@@ -5,8 +5,8 @@ import av
 import numpy as np
 import logging
 import os
-from twilio.base.exceptions import TwilioRestException
-from twilio.rest import Client
+# from twilio.base.exceptions import TwilioRestException
+# from twilio.rest import Client
 
 # Additional imports from streamlit_webrtc
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
