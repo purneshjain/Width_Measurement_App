@@ -42,11 +42,36 @@ ice_servers = get_ice_servers()
 
 class WidthMeasurementProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
-        img = frame.to_ndarray(format="bgr24")
-        # Process the image here
-        # Example: Draw lines and text on the image
-        distance = 10  # Example distance value
-        cv2.putText(img, f"Distance: {distance}mm", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        mg = frame.to_ndarray(format="bgr24")
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Corrected cv2.cvtcolor to cv2.cvtColor and cv2.COLOR_BGR2GRAY
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    _, thresh = cv2.threshold(blur, 75, 255, cv2.THRESH_BINARY_INV)  # Corrected cv2.thresh_binary_inv to cv2.THRESH_BINARY_INV
+    cnts, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # Corrected cv2.findcontours to cv2.findContours, cv2.RETR_EXTERNAL, and cv2.CHAIN_APPROX_SIMPLE
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+
+    min_area = 1000
+    black_dots = []
+    for c in cnts:
+        area = cv2.contourArea(c)
+        if area > min_area:
+            black_dots.append(c)
+    contours_only = np.zeros_like(img)  # Changed "frame" to "img" and added missing "np."
+
+    cv2.drawContours(contours_only, black_dots, -1, (0, 255, 0), 2)  # Corrected cv2.drawcontours to cv2.drawContours and added thickness parameter
+
+    pxl_ratio = 16 / 160
+    for row_num in range(img.shape[0] - 1):
+        row = gray[row_num: row_num + 1, :]
+        left_px = np.argmax(row)
+        row = np.flip(row)
+        right_px = img.shape[1] - np.argmax(row)
+        thickness = 2
+        if row_num % 100 == 0 and left_px != 0 and right_px != 0:
+            cv2.line(img, (left_px, row_num), (right_px, row_num), (0, 0, 255), thickness)
+            distance = round((right_px - left_px) * pxl_ratio, 2)
+            l_org = row_num - 10
+            cv2.putText(img, str(distance) + "mm", (left_px, l_org), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)  
+            print(distance)
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 webrtc_ctx = webrtc_streamer(
