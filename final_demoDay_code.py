@@ -8,6 +8,10 @@ import os
 from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client
 
+from sample_utils.download import download_file
+from sample_utils.turn import get_ice_servers
+
+
 # Additional imports from streamlit_webrtc
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
 
@@ -16,7 +20,7 @@ logger = logging.getLogger(__name__)
 def get_ice_servers():
     try:
         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-        auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+        auth_token =os.environ["TWILIO_AUTH_TOKEN"]
     except KeyError:
         logger.warning(
             "Twilio credentials are not set. Fallback to a free STUN server from Google."
@@ -52,6 +56,6 @@ class WidthMeasurementProcessor(VideoProcessorBase):
 webrtc_ctx = webrtc_streamer(
     key="object-detection",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": ice_servers},  # Add ICE servers configuration
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},  # Add ICE servers configuration
     video_processor_factory=WidthMeasurementProcessor,
 )
