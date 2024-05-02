@@ -52,6 +52,6 @@ class WidthMeasurementProcessor(VideoProcessorBase):
 webrtc_ctx = webrtc_streamer(
     key="object-detection",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": ice_servers},  # Add ICE servers configuration
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},  # Add ICE servers configuration
     video_processor_factory=WidthMeasurementProcessor,
 )
