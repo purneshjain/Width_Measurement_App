@@ -55,9 +55,8 @@ class WidthMeasurementProcessor(VideoProcessorBase):
         area = cv2.contourArea(c)
         if area > min_area:
             black_dots.append(c)
-    contours_only = np.zeros_like(img)  # Changed "frame" to "img" and added missing "np."
-
-    cv2.drawContours(contours_only, black_dots, -1, (0, 255, 0), 2)  # Corrected cv2.drawcontours to cv2.drawContours and added thickness parameter
+    contours_only = np.zeros_like(img) 
+    cv2.drawContours(contours_only, black_dots, -1, (0, 255, 0), 2)  
 
     pxl_ratio = 16 / 160
     for row_num in range(img.shape[0] - 1):
@@ -75,8 +74,20 @@ class WidthMeasurementProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 webrtc_ctx = webrtc_streamer(
-    key="object-detection",
+    key="Width_Measurement",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": ice_servers},  # Add ICE servers configuration
+    rtc_configuration={
+        "iceServers": get_ice_servers(),
+        "iceTransportPolicy": "relay",
+        },  # Add ICE servers configuration
     video_processor_factory=WidthMeasurementProcessor,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
+)
+
+
+st.markdown(
+    "This demo uses a model and code created by Purnesh Jain"
+    "Under the Guidance of Ajinkya Kalbhor & Vishwas Gurav"
+    "Many thanks to the Mercedes-Benz."
 )
