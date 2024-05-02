@@ -13,27 +13,27 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
 
 logger = logging.getLogger(__name__)
 
-def get_ice_servers():
-    try:
-        account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-        auth_token = os.environ["TWILIO_AUTH_TOKEN"]
-    except KeyError:
-        logger.warning(
-            "Twilio credentials are not set. Fallback to a free STUN server from Google."
-        )
-        return [{"urls": ["stun:stun.l.google.com:19302"]}]
+# def get_ice_servers():
+#     try:
+#         account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+#         auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+#     except KeyError:
+#         logger.warning(
+#             "Twilio credentials are not set. Fallback to a free STUN server from Google."
+#         )
+#         return [{"urls": ["stun:stun.l.google.com:19302"]}]
 
-    client = Client(account_sid, auth_token)
+#     client = Client(account_sid, auth_token)
 
-    try:
-        token = client.tokens.create()
-    except TwilioRestException as e:
-        st.warning(
-            f"Error occurred while accessing Twilio API. Fallback to a free STUN server from Google. ({e})"
-        )
-        return [{"urls": ["stun:stun.l.google.com:19302"]}]
+#     try:
+#         token = client.tokens.create()
+#     except TwilioRestException as e:
+#         st.warning(
+#             f"Error occurred while accessing Twilio API. Fallback to a free STUN server from Google. ({e})"
+#         )
+#         return [{"urls": ["stun:stun.l.google.com:19302"]}]
 
-    return token.ice_servers
+#     return token.ice_servers
 
 st.title("Width Measurement")
 
