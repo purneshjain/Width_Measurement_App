@@ -1,18 +1,27 @@
-name: Your Workflow Name
+name: Streamlit App Deployment
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your main branch name
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set up environment variables
-        env:
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-      - name: Your Other Workflow Steps
-        # Add your workflow steps here
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12.2'  # Replace 'x' with your Python version
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Deploy Streamlit app
+        run: |
+          streamlit run final_demoDay_code.py  # Replace 'your_app.py' with your Streamlit app filename
