@@ -46,7 +46,7 @@ ice_servers = get_ice_servers()
 
 class WidthMeasurementProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
-        mg = frame.to_ndarray(format="bgr24")
+    img = frame.to_ndarray(format="bgr24")
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Corrected cv2.cvtcolor to cv2.cvtColor and cv2.COLOR_BGR2GRAY
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
     _, thresh = cv2.threshold(blur, 75, 255, cv2.THRESH_BINARY_INV)  # Corrected cv2.thresh_binary_inv to cv2.THRESH_BINARY_INV
