@@ -23,7 +23,7 @@ st.title("Width Measurement")
 
 # Get ICE servers
 ice_servers = get_ice_servers()
-def callback(frame: av.VideoFrame) -> av.VideoFrame:  # Changed av.videoframe to av.VideoFrame
+def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:  # Changed av.videoframe to av.VideoFrame
     img = frame.to_ndarray(format="bgr24")
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Corrected cv2.cvtcolor to cv2.cvtColor and cv2.COLOR_BGR2GRAY
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
