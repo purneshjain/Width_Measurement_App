@@ -1,5 +1,5 @@
 opencv-python-headless==4.9.0.80
-streamlit-webrtc==0.47.1
+streamlit-webrtc==0.47.7
 av==11.0.0
 numpy== 1.26.4
 twilio~=8.13.0
